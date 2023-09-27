@@ -1,4 +1,5 @@
 import { HttpRequest } from "@azure/functions"
+import { model } from "mongoose"
 import { Context } from "vm"
 import { People } from "../../src/models/PeopleModel"
 
@@ -6,8 +7,10 @@ export default async (context: Context,req: HttpRequest) => {
     const { page, pageSize } = req.query
     const id = req.params.id
 
+    const modelPeople = model('People').schema.obj
+    
     Object.keys(req.query).forEach((key) => {
-        if (!Object.keys(People.schema).includes(key)){
+        if (!Object.keys(modelPeople).includes(key)){
             delete req.query[key]
         }
     })
