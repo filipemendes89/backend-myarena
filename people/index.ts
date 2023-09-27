@@ -22,7 +22,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     const fnc = URL_MAP.get(req.method)
     console.log(`Running: ${req.method} ${fnc.name}`)
     await fnc(context, req)
-    console.log(JSON.stringify(context.res))
+    context.res.headers = {
+        'Content-Type': 'application/json'
+    }; 
 };
 
 export default httpTrigger;
