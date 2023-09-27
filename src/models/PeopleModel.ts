@@ -4,7 +4,7 @@ const peopleSchema = new mongoose.Schema({
     createdAt: { type: Date, required: true, default: new Date() },
     nome: { type: String, required: true },
     email: { type: String, required: true },
-    dtNascimento: { type: Date, required: false },
+    dtNascimento: { type: String, required: false },
     genero: { type: String, required: false },
     nacionalidade: { type: String, required: false },
     cpf: { type: String, required: true },

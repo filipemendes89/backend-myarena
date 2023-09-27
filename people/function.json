@@ -10,7 +10,8 @@
         "post",
         "put",
         "options"
-      ]
+      ],
+      "route": "people/{id?}"
     },
     {
       "type": "http",
