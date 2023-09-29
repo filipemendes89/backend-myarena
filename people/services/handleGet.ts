@@ -4,7 +4,7 @@ import { Context } from "vm"
 import { People } from "../../src/models/PeopleModel"
 
 export default async (context: Context,req: HttpRequest) => { 
-    const { page, pageSize } = req.query
+    const { page, pageSize, email } = req.query
     const id = req.params.id
 
     const modelPeople = model('People').schema.obj
@@ -17,6 +17,9 @@ export default async (context: Context,req: HttpRequest) => {
 
     if(id)
         return context.res = { body: await People.findById(id).exec() }
+
+    if(email) 
+        return context.res = { body: await People.findOne({ email }).exec() }
         
     const totalPeople = await People.find(req.query).count()
     const people = await People.find(req.query)
