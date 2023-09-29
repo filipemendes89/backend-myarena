@@ -11,7 +11,7 @@ const peopleSchema = new mongoose.Schema({
     phone: { type: String, required: true },
     avatar: { type: String, required: false },
     sports: { type: [String], required: true },
-    tipo: { type: String, required: true },
+    tipo: { type: String, required: true, default: 'Aluno' },
     id: { type: Schema.Types.ObjectId },
     instagram: { type: String, required: false },
     tenantId: { type: String, default: "1" }
