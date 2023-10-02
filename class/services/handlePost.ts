@@ -9,7 +9,7 @@ export default async (context: Context,req: HttpRequest) => {
     try {
         session.startTransaction()
 
-        req.body.isIsFull = req.body.peopleList?.length >= req.body.people 
+        req.body.isItFull = req.body.peopleList?.length >= req.body.people 
         
         const createdClass = await new Class(req.body).save()
         const { courtId, time, date, _id: classId} = createdClass
