@@ -43,12 +43,13 @@ const getFilteredPeople = async (context: Context,req: HttpRequest, filter: stri
     const totalFiltered = await People.find({ $or: [
         { cpf: { $regex: filter, $options: 'i' } },
         { nome: { $regex: filter, $options: 'i' } }
-      ]}).count()
+      ], $and: [req.query]}).count()
 
     const filteredPeople = await People.find({ $or: [
         { cpf: { $regex: filter, $options: 'i' } },
         { nome: { $regex: filter, $options: 'i' } }
-    ]})
+    ], $and: [req.query]})
+    
     .limit(Number(pageSize) * 1)
     .skip((Number(page) - 1) * Number(pageSize))
     .exec()
