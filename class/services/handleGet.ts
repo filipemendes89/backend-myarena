@@ -16,7 +16,7 @@ export default async (context: Context,req: HttpRequest) => {
     })
 
     if(id)
-        return context.res = { body: await Class.findById(id).exec() }
+        return context.res = { body: await Class.findById(id).populate('teacherId').populate('courtId').exec() }
     
     if(memberId)
         return await handleMemberId(context, req, memberId, page, pageSize)
@@ -25,6 +25,8 @@ export default async (context: Context,req: HttpRequest) => {
     const classFound = await Class.find(req.query)
     .limit(Number(pageSize) * 1)
     .skip((Number(page) - 1) * Number(pageSize))
+    .populate('teacherId')
+    .populate('courtId')
     .exec()
 
     return context.res = {
@@ -45,6 +47,8 @@ const handleMemberId = async (context: Context, req: HttpRequest, memberId: stri
     const classesFound = await Class.find(query)
     .limit(Number(pageSize) * 1)
     .skip((Number(page) - 1) * Number(pageSize))
+    .populate('teacherId')
+    .populate('courtId')
     .exec()
 
     return context.res = {

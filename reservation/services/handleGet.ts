@@ -16,12 +16,13 @@ export default async (context: Context,req: HttpRequest) => {
     })
 
     if(id)
-        return context.res = { body: await Reservation.findById(id).exec() }
+        return context.res = { body: await Reservation.findById(id).populate('reserverId').exec() }
         
     const totalReservation = await Reservation.find(req.query).count()
     const classFound = await Reservation.find(req.query)
     .limit(Number(pageSize) * 1)
     .skip((Number(page) - 1) * Number(pageSize))
+    .populate('reserverId')
     .exec()
 
     return context.res = {
