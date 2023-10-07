@@ -8,8 +8,8 @@ const classSchema = new mongoose.Schema({
     teacherId: { type: Schema.Types.ObjectId, ref: 'People' },
     time: { type: String, required: true },
     people: { type: Number, required: true },
-    level: { type: String, required: true },
-    peopleList: { type: [{ id: String, nome: String, at: { type: Date, default: new Date() } }], required: false },
+    level: { type: Number, required: true },
+    peopleList: { type: [{ id: String, nome: String, level: String, at: { type: Date, default: new Date() } }], required: false },
     isItFull: { type: Boolean, required: true, default: false },
     court: { type: String, required: true },
     tenantId: { type: String, default: "1" }
