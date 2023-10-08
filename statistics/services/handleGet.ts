@@ -47,7 +47,7 @@ const getReservationByMonth = async () => {
     
     monthNumbers.push(
       { 
-        label: moment().subtract(i, 'months').format('MMMM'), 
+        label: moment().subtract(i, 'months').format('MMM/YY'), 
         data, 
         type: 'column',
         date: moment(`${year}-${month}-01`)
