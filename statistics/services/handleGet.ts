@@ -1,14 +1,17 @@
 import { HttpRequest } from "@azure/functions"
+import * as moment from 'moment'
 import { Context } from "vm"
 import { People } from "../../src/models/PeopleModel"
+import { Reservation } from "../../src/models/ReservationModel"
 import { Sport } from "../../src/models/SportModel"
 
 export default async (context: Context,req: HttpRequest) => { 
-    const { page, pageSize, date } = req.query
+    const { page, pageSize } = req.query
     
     return context.res = {
        body : { 
-        sportByPeople: await getSportsByPeople()
+        sportByPeople: await getSportsByPeople(),
+        reservationByMonth: await getReservationByMonth()
       }
     }
 }
@@ -28,4 +31,29 @@ const getSportsByPeople = async () => {
 
   return sportByPeople
 
+}
+
+const getReservationByMonth = async () => {
+  let month 
+  let year 
+  const monthNumbers = []
+  
+  for(let i = 0; i <= 11; i++){
+    month = moment().subtract(i, 'months').format('MM')
+    year = moment().subtract(i, 'months').format('YYYY')
+    let data = [await Reservation.find({
+      date: { $regex: `${month}/${year}`, $options: 'i' }
+    }).count()]
+    
+    monthNumbers.push(
+      { 
+        label: moment().subtract(i, 'months').format('MMMM'), 
+        data, 
+        type: 'column',
+        date: moment(`${year}-${month}-01`)
+      }
+    )
+  }
+
+  return monthNumbers.sort((a, b) => a.date.isAfter(b.date) ? 1 : -1)
 }

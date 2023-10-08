@@ -10,6 +10,7 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
+    "moment": "^2.29.4",
     "mongoose": "^7.5.3",
     "validator": "^13.11.0"
   },
