@@ -51,51 +51,57 @@ const getReservationByMonth = async () => {
   }).distinct('sport')
 
   for(let i = 0; i <= 5; i++){
+    await getData(i)
+  }
+
+  async function getData(i: number) {
     month = moment().subtract(i, 'months').format('MM')
     year = moment().subtract(i, 'months').format('YYYY')
     categories.unshift(moment(`${year}-${month}-01`).format('MMM/YY'))
 
-    let data = [await Reservation.find({
+    Reservation.find({
       date: { $regex: `${month}/${year}`, $options: 'i' }
-    }).count()]
-    
+    }).count().then(count => {
+      
     monthNumbers.push(
       { 
         label: moment().subtract(i, 'months').format('MMM/YY'), 
-        data, 
+        data: [count], 
         type: 'column',
         date: moment(`${year}-${month}-01`)
       }
     )
+    })
 
-    const sports = await Class.aggregate([
+    Class.aggregate([
       { $match: {date: { $regex: `${month}/${year}`, $options: 'i' }} },
       { $group: { _id: '$sport', totalPeople: { $sum: { $size: '$peopleList' } } } }
-    ])
+    ]).then(sports => {
+      const sportsComplete = sportsInYear.map(sport => {
+        const sportFound = sports.find(sportFound => sportFound._id === sport)
+        if(sportFound)
+          return sportFound
+        return {
+          _id: sport,
+          totalPeople: 0
+        }
+      })
+      sportsComplete.map(sportFound => {
+        const numberFound = classNumbers.find(sport => sport.label === sportFound._id)
+        if(numberFound)
+          numberFound.data.unshift(sportFound.totalPeople)
+        else
+          classNumbers.push({
+            label: sportFound._id,
+            data: [sportFound.totalPeople],
+            type: 'line',
+            date: moment(`${year}-${month}-01`)
+          })
+      })
+    } )
 
-    const sportsComplete = sportsInYear.map(sport => {
-      const sportFound = sports.find(sportFound => sportFound._id === sport)
-      if(sportFound)
-        return sportFound
-      return {
-        _id: sport,
-        totalPeople: 0
-      }
-    })
-    sportsComplete.map(sportFound => {
-      const numberFound = classNumbers.find(sport => sport.label === sportFound._id)
-      if(numberFound)
-        numberFound.data.unshift(sportFound.totalPeople)
-      else
-        classNumbers.push({
-          label: sportFound._id,
-          data: [sportFound.totalPeople],
-          type: 'line',
-          date: moment(`${year}-${month}-01`)
-        })
-    })
+  
   }
-
   return {
     monthNumbers: monthNumbers.sort((a, b) => a.date.isAfter(b.date) ? 1 : -1),
     classNumbers: classNumbers.sort((a, b) => a.date.isAfter(b.date) ? 1 : -1),
