@@ -38,8 +38,6 @@ const getSportsByPeople = async () => {
 }
 
 const getReservationByMonth = async () => {
-  let month 
-  let year 
   const monthNumbers = []
   const classNumbers = []
   const categories = []
@@ -55,8 +53,8 @@ const getReservationByMonth = async () => {
   }
 
   async function getData(i: number) {
-    month = moment().subtract(i, 'months').format('MM')
-    year = moment().subtract(i, 'months').format('YYYY')
+    let month = moment().subtract(i, 'months').format('MM')
+    let year = moment().subtract(i, 'months').format('YYYY')
     categories.unshift(moment(`${year}-${month}-01`).format('MMM/YY'))
 
     Reservation.find({
