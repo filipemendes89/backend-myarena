@@ -10,6 +10,7 @@ export default async (context: Context,req: HttpRequest) => {
     const { page, pageSize } = req.query
 
     const dataByDate = await getReservationByMonth()
+
     return context.res = {
        body : { 
         sportByPeople: await getSportsByPeople(),
@@ -39,7 +40,7 @@ const getSportsByPeople = async () => {
 
 const getReservationByMonth = async () => {
   const monthNumbers = []
-  const classNumbers = []
+  const classNumbers: { label: string, data: { total: number, date: moment.Moment }[], type: string }[] = []
   const categories = []
   
   const sportsInYear = await Class.find({
@@ -87,22 +88,20 @@ const getReservationByMonth = async () => {
       sportsComplete.map(sportFound => {
         const numberFound = classNumbers.find(sport => sport.label === sportFound._id)
         if(numberFound)
-          numberFound.data.unshift(sportFound.totalPeople)
+          numberFound.data.unshift({ total: sportFound.totalPeople, date: moment().subtract(i, 'months').startOf('month') })
         else
           classNumbers.push({
             label: sportFound._id,
-            data: [sportFound.totalPeople],
-            type: 'line',
-            date: moment(`${year}-${month}-01`)
+            data: [{ total: sportFound.totalPeople, date: moment().subtract(i, 'months').startOf('month') }], 
+            type: 'line'
           })
       })
-    } )
-
-  
+    })
   }
+
   return {
     monthNumbers: monthNumbers.sort((a, b) => a.date.isAfter(b.date) ? 1 : -1),
-    classNumbers: classNumbers.sort((a, b) => a.date.isAfter(b.date) ? 1 : -1),
+    classNumbers: classNumbers,
     categories
   }
 }
