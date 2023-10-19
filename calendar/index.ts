@@ -10,7 +10,7 @@ const URL_MAP = new Map<string, Function>([
     ['PUT', handlePut]
 ])
 
-const mongooseConnection = mongoose.connect('mongodb+srv://filipe:nxXegcYyOJljEMzf@cluster0.8ospl.mongodb.net/?retryWrites=true&w=majority');
+const mongooseConnection = mongoose.connect(process.env.MONGOCONN);
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     const fnc = URL_MAP.get(req.method)
     console.log(`Running: ${req.method} ${fnc.name}`)

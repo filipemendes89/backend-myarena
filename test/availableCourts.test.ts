@@ -11,7 +11,7 @@ describe("handleGetAvailableCourts", () => {
   let req: HttpRequest;
 
   beforeAll(() => {
-    const mongooseConnection = mongoose.connect('mongodb+srv://filipe:nxXegcYyOJljEMzf@cluster0.8ospl.mongodb.net/?retryWrites=true&w=majority');
+    const mongooseConnection = mongoose.connect(process.env.MONGOCONN);
   })
   beforeEach(() => {
     context = {} as Context;

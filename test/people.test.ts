@@ -10,7 +10,7 @@ describe("Testes de pessoas", () => {
   let req;
 
   beforeAll(() => {
-    const mongooseConnection = mongoose.connect('mongodb+srv://filipe:nxXegcYyOJljEMzf@cluster0.8ospl.mongodb.net/?retryWrites=true&w=majority');
+    const mongooseConnection = mongoose.connect(process.env.MONGOCONN);
   })
 
   beforeEach(() => {
