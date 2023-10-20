@@ -1,7 +1,7 @@
 import { HttpRequest } from "@azure/functions"
-import mongoose from "mongoose"
 import { Context } from "vm"
 import handleGetAvailableCourts from "../availabeCourts/services/handleGet"
+import connectMongoose from "../src/connectMongoose"
 import { Calendar } from "../src/models/CalendarModel"
 import { Court } from "../src/models/CourtModel"
 import { Reservation } from "../src/models/ReservationModel"
@@ -11,7 +11,7 @@ describe("handleGetAvailableCourts", () => {
   let req: HttpRequest;
 
   beforeAll(() => {
-    const mongooseConnection = mongoose.connect(process.env.MONGOCONN);
+    connectMongoose()
   })
   beforeEach(() => {
     context = {} as Context;

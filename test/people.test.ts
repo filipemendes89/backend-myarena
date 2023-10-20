@@ -1,7 +1,7 @@
-import mongoose from "mongoose"
 import handleGet from "../people/services/handleGet"
 import handlePost from "../people/services/handlePost"
 import handlePut from "../people/services/handlePut"
+import connectMongoose from "../src/connectMongoose"
 import { People } from "../src/models/PeopleModel"
 
 jest.setTimeout(60000)
@@ -10,7 +10,7 @@ describe("Testes de pessoas", () => {
   let req;
 
   beforeAll(() => {
-    const mongooseConnection = mongoose.connect(process.env.MONGOCONN);
+    connectMongoose()
   })
 
   beforeEach(() => {
